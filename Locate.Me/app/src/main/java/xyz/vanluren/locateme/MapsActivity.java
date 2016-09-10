@@ -1,3 +1,5 @@
+package xyz.vanluren.locateme;
+
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -25,10 +27,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import xyz.vanluren.locateme.R;
-
-
 
 public class MapsActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
