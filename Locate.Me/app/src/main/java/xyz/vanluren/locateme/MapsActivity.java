@@ -123,7 +123,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);//sætter intervallet hvorved der bliver requestet nye koordinater til 1000 ms
         mLocationRequest.setFastestInterval(1000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);//Hvis vi skal være lidt gode ved vore brugeres batteri tid, skal der balanceres mellem power og accuracy...
 
         //Runtime check om appen har lov til at bruge LocationServices
         if (ContextCompat.checkSelfPermission(this,
@@ -136,6 +136,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onConnectionSuspended(int i) {
+        //Lol lol, log alt
         Log.d(TAG, "Location services has been suspended. Please reconnect.");
     }
 
@@ -166,12 +167,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+
+    //Vi bør nok overvejer at håndtere at forbindelsen til locationListeneren ikke connecter.
+    //Men det gider jeg faktisk ikke lige nu
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
     }
 
+
+
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
+    //Metoden der håndterer et tjek for om man har de rigtige permissions.
     public boolean checkLocationPermission(){
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -203,6 +211,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    //Metoden der håndterer det resultat der må være fra et permission tjek
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
