@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -30,11 +31,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LocationListener {
 
     private GoogleMap mMap;
-    GoogleApiClient mGoogleApiClient;
-    Location mLastLocation;
-    Marker mCurrLocationMarker;
-    LocationRequest mLocationRequest;
+    protected GoogleApiClient mGoogleApiClient;
+    protected  Location mLastLocation;
+    protected Marker mCurrLocationMarker;
+    protected LocationRequest mLocationRequest;
+    private static final String TAG = MapsActivity.class.getSimpleName();
 
+    //Create Activityen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,20 +51,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+        try {
+            //Check om API Clienten er åben
+            if(mGoogleApiClient.isConnected()){
+                //Fjern updates, og luk API Clienten
+                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+                mGoogleApiClient.disconnect();
+                Log.d(TAG, "The API client has been disconnected");
+            }
 
+        }catch (Exception e){}
+
+    }
+
+
+    //Tegner map og bestemmer hvornår vi kan lave API kald
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        //Initialize Google Play Services
+
+        //Chek om android os er M
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            //Check for permissions i runtime
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
+                //Connect til API'en
                 buildGoogleApiClient();
                 mMap.setMyLocationEnabled(true);
             }
         }
+        //Connect selvom det ikke er Android M
         else {
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
@@ -70,12 +94,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     // GoogleApiClient, er et object der giver os lov til at lave kald til Google API'et
     protected synchronized void buildGoogleApiClient() {
+
+        //API Client bliver bygget
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-        mGoogleApiClient.connect();
+
+        //Gad vide hvilken exception den kan kaste??
+        try {
+            if(!mGoogleApiClient.isConnected()){
+                mGoogleApiClient.connect();
+                Log.d(TAG, "The API Client has been connected");
+            }
+            else{
+                Log.d(TAG, "Somthing went wrong, your API Client has not been connected");
+            }
+        }catch (Exception e){
+
+        }
+
     }
 
     @Override
@@ -97,7 +136,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.d(TAG, "Location services has been suspended. Please reconnect.");
     }
 
     //Håndterer *SJOVT NOK* hvis der sker en ændring i brugerens location
