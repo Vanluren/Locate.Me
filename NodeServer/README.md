@@ -7,7 +7,7 @@ Node er en nem måde at lave servere på, og siden det er JavaScript det er skre
 
     1. Først og fremmest skal i bruge programmet, det kan downloades her:
 
-        (https://nodejs.org/en/download/ "NodeJS Downloade")
+        [NodeJS Downloadeside](https://nodejs.org/en/download/)
 
     2. Kør herefter installeren("Lol, okay Villads - Tak lisom")
 
