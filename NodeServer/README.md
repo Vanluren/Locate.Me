@@ -5,17 +5,51 @@ Hey Boys, i skal lige have downloadet Node, og derved også NPM.
 
 Node er en nem måde at lave servere på, og siden det er JavaScript det er skrevet i, er det endnu nemmere at lave noget der fungere hurtigt.
 
-    1. Først og fremmest skal i bruge programmet, det kan downloades her:
+###Installation:
 
-        [NodeJS Downloadeside](https://nodejs.org/en/download/)
+1. Først og fremmest skal i bruge programmet, det kan downloades her:
 
-    2. Kør herefter installeren("Lol, okay Villads - Tak lisom")
+    [NodeJS Downloadside](https://nodejs.org/en/download)
 
-    3. Genstart!!! Meget vigtigt.
+2. Kør herefter installeren("Lol, okay Villads - Tak lisom")
 
-Test tid, nu skulle Node være installeret, så kan i:
+3. Genstart!!! Meget vigtigt.
 
-    * Teste Node ved at skrive `node -v`
-    * Teste NPM ved at skrive `npm -v`
+###Test tid, nu skulle Node være installeret, så kan i:
+
+* Teste Node ved at skrive `node -v`
+* Teste NPM ved at skrive `npm -v`
+
+
+### Nå, hvad skal vi så bruge det til?
+
+Vi skal bruge det til at kunne kører en nem og **let** server.
+
+* Node:
+    Node er et runtime system skrevet i javascript(Læs: Node styrer hvad din server forstår ud fra forskellige filer).
+* NPM:
+    NPM er "Node Package Manager" den forstår commands i din CLI som peger på pakker eller programmer den skal downloade, og hvor de findes.
+
+####Så vi skal nu reelt starte serveren. Hvordan gør man det?
+Start med at bevæg **via terminalen** ind i jeres projekt mappe:
+    
+`cd /<projectDirectoryPath>`
+
+Initialiser NPM i mappen:
+    
+`npm init`
+
+Kør Node med "app.js" som argument, aka. vores server applikation:
+    
+`node app.js`
+
+Åben nu et browser vindue og gå ind på:
+
+`http://localhost:3000/usrLocations`
+    
+    
+
+
+
 
 
