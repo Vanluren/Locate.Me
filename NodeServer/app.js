@@ -26,12 +26,13 @@ app.use('/', routes);
 app.use('/users', users);
 
 
-app.get('/usrLocations', function (request, response) {
-    response.json({lat:56.1464398, lng:10.1898191})
-})
+app.get('/users', users.getAllUserLocations());
+app.get('/users/:id', users.getUserLocation());
+app.post('users', users.postNewUser());
+app.put('/users/:id', users.putUserUpdate());
+app.delete('/users/:id', users.deleteUser());
 
 
-app.po
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
