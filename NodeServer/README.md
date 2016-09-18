@@ -41,7 +41,7 @@ Initialiser NPM i mappen:
 
 Kør Node med "app.js" som argument, aka. vores server applikation:
     
-`node app.js`
+`node server.js`
 
 Åben nu et browser vindue og gå ind på:
 
