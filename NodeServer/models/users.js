@@ -1,42 +1,24 @@
+// grab the things we need
 var mongoose = require('mongoose');
 
-var userSchema = new mongoose.Schema({
-    id:{
-        type:Number
-    },
-    name:{
-        type: String,
-        required: true
-    },
-    lat:{
-        type:Number
-    },
-    lng:{
-        type:Number
-    }
-}, {collection: 'users'});
 
-var User = module.exports = mongoose.model('Users', userSchema,"users");
+// create a schema
+var userSchema = mongoose.Schema({
+    name: String,
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    admin: Boolean,
+    location: String,
+    meta: {
+        age: Number,
+        website: String
+    },
+    created_at: Date,
+    updated_at: Date
+});
+
+var User = mongoose.model('User', userSchema, 'users');
 
 module.exports.getUser = function (callback, limit) {
-
     User.find(callback).limit(limit);
-}
-module.exports.addUser = function (user, callback) {
-    User.create(user, callback);
-}
-
-module.exports.updateUser = function(id, user, options, callback){
-    var query = {_id: id};
-
-    var update = {
-        name: user.name
-    }
-
-    User.findOneAndUpdate(query, update, options, callback);
-}
-
-module.exports.removeUser = function(id, callback){
-    var query = {_id: id};
-    User.remove(query, callback);
 }

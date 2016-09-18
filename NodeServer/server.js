@@ -1,26 +1,32 @@
 var express = require('express');
 var app = express();
-var path = require('path');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
+var User = require("./models/users.js");
 
-Users = require('./models/users')
+app.use(express.static(__dirname+'/client'));
+app.use(bodyParser.json());
 
 
-mongoose.connect('mongodb://localhost/UserDB')
+
+mongoose.connect('mongodb://localhost/userDB', function (err, db) {
+    if(err){
+        console.log(err);
+    }
+});
 var db = mongoose.connection;
 
 app.get('/', function(req, res) {
     res.send('Please refer to our api guide for requests.');
 });
 
-app.get('/userLocations', function(req, res){
-        Users.getUser(function (err, users) {
-         res.json(users);
-        });
+app.get('/api/userLocations', function(req, res){
+    User.getUser(function(err, users){
+        if(err){
+            throw err;
+        }
+        res.json(users);
+    });
 });
 
 
