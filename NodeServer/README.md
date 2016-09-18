@@ -48,8 +48,18 @@ Kør Node med "app.js" som argument, aka. vores server applikation:
 `http://localhost:3000/usrLocations`
     
     
+________________________________________________________________________
 
+## MongoDB
+ 
+ Næste stop er databasen! 
 
+###Installation:
 
+1. Start med at downloade den rigtige version fra:
 
+ [MongoDB Downloadside](https://www.mongodb.com/download-center)
 
+2. Kør så installationen, ligesom sidst("Lol, Villads - Laver du samme lade joke igen?")
+
+3. Genstart - Det er åbenbart meget vigtigt for Windows computere...

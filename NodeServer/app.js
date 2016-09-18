@@ -5,8 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+var users = require('./routes/users.js');
 
 var app = express();
 
@@ -22,15 +21,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
 app.use('/users', users);
 
+module.exports = function(req, res){
+    res.send("respond with a resource");
+};
 
-app.get('/users', users.getAllUserLocations());
-app.get('/users/:id', users.getUserLocation());
-app.post('users', users.postNewUser());
-app.put('/users/:id', users.putUserUpdate());
-app.delete('/users/:id', users.deleteUser());
+app.get('/users', users.getAllUserLocations(req,res));
+app.get('/users/:id', users.getUserLocationById(req,res));
+app.delete('/users/:id', users.deleteUser(req, res));
 
 
 
@@ -64,6 +63,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;
