@@ -20,7 +20,7 @@ app.get('/', function(req, res) {
     res.send('Please refer to our api guide for requests.');
 });
 
-app.get('/api/userLocations', function(req, res){
+app.get('/api/users', function(req, res){
     User.getUser(function(err, users){
         if(err){
             throw err;
@@ -29,6 +29,36 @@ app.get('/api/userLocations', function(req, res){
     });
 });
 
+app.post('/api/users', function(req, res){
+    var user = req.body;
+    User.addUser(user, function(err, user){
+        if(err){
+            throw err;
+        }
+        res.json(user);
+    });
+});
+
+
+app.get('/api/users/:_id', function (req, res) {
+    var id = req.params._id;
+    User.getUserById(id, function (err, user) {
+        if(err){
+            throw err;
+        }
+        res.json(user);
+    });
+});
+
+app.delete('/api/users/:id', function (req, res) {
+    var id = req.params._id;
+    User.removeUser(id, function (err, user) {
+        if(err){
+            throw err;
+        }
+        res.json(user);
+    });
+});
 
 app.listen(3000);
 
