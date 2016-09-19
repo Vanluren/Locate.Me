@@ -21,7 +21,6 @@ router.get('/:id', function(req, res, next){
         if(err) return next(err);
         res.json(user);
     });
-
 });
 
 router.put('/:id', function(req, res, next){
@@ -29,7 +28,6 @@ router.put('/:id', function(req, res, next){
         if(err) return next(err);
         res.json(user);
     });
-
 });
 
 router.delete('/:id', function(req, res, next){
@@ -37,7 +35,6 @@ router.delete('/:id', function(req, res, next){
         if(err) return next(err);
         res.json(user);
     });
-
 });
 
 module.exports = router;

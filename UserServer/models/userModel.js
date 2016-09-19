@@ -8,8 +8,7 @@ var userSchema = mongoose.Schema({
     name: String,
     lat: Number,
     lng: Number,
-    date: {type:Date, default: Date.now()},
-    updated_at: {type:Date, default:Date.now()}
+    date: {type:Date, default: Date.now()}
 });
 
 var User = mongoose.model('User', userSchema, 'users');
