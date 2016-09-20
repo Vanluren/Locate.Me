@@ -1,39 +1,33 @@
 var express = require('express');
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+
+var routes = require('./routes/index');
+var users = require('./routes/users');
+
+// load mongoose package
+var mongoose = require('mongoose');
+
+// Use native Node promises
+mongoose.Promise = global.Promise;
+
+// connect to MongoDB
+mongoose.connect('mongodb://localhost/users')
+  .then(() =>  console.log('connection succesful'))
+  .catch((err) => console.error(err));
+
 var app = express();
 
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var logger = require('morgan');
-var path = require('path');
-var favico
-
-var User = require("./models/userModel.js");
-var routes = require('./routes/index');
-var users = require('./routes/users.js');
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 app.use('/', routes);
-app.use('/users', users);
-
-app.use(logger('dev'));
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(express.static(__dirname+'/client'));
-app.use(bodyParser.json());
-
-mongoose.connect('mongodb://localhost/users', function (err, db) {
-    if(err){
-        console.log(err);
-    }
-});
-
-var db = mongoose.connection;
-
-app.listen(3000);
-
-module.exports = app;
-
-app.get('/', function(req, res) {
-    res.send('Please refer to our api guide for requests.');
-});
+app.use('/Users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -65,5 +59,7 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+app.listen(3000);
 
 module.exports = app;
