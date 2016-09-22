@@ -56,15 +56,6 @@
                 android:hint="Password"/>
         </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:ems="10"
-            android:id="@+id/tell_us_more"
-            android:hint="Profile Text"
-            android:layout_weight="0.44" />
-
         <!-- Signup Button -->
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_signup"

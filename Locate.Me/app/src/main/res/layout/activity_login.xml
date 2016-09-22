@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="xyz.vanluren.locateme.LoginActivity">
+    tools:context="xyz.vanluren.locateme.LoginActivity"
+    android:baselineAligned="false">
 
     <!-- Login progress -->
 
@@ -39,10 +40,9 @@
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_email"
+                    android:hint="Email"
                     android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -59,8 +59,7 @@
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -68,21 +67,22 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/email_sign_in_button"
+        android:id="@+id/btn_login"
         style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
+        android:layout_width="305dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Log In"
-        android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/sign_up_btn"
-        style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Sign Up"
         android:textStyle="bold"
         android:elevation="0dp" />
+
+    <Button
+android:id="@+id/btn_signup"
+style="?android:textAppearanceSmall"
+android:layout_width="310dp"
+android:layout_height="wrap_content"
+android:layout_marginTop="16dp"
+android:text="Sign Up"
+android:textStyle="bold"
+android:elevation="23dp" />
 </LinearLayout>

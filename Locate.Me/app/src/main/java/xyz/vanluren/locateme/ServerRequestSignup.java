@@ -7,15 +7,12 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by villadsvalur on 22/09/2016.
- */
 
 public class ServerRequestSignup extends StringRequest{
-    private static final String REQUEST_URL = "http://localhost/users";
+    private static final String REQUEST_URL = "http://10.0.2.2:3000/users/create";
     private final HashMap params;
 
-    public ServerRequestSignup(String name, String email, String password, int lat, int lng, Response.Listener<String> listener) {
+    public ServerRequestSignup(String name, String email, String password, Response.Listener<String> listener) {
 
         super(Request.Method.POST, REQUEST_URL, listener, null);
 
@@ -23,9 +20,6 @@ public class ServerRequestSignup extends StringRequest{
         params.put("name", name);
         params.put("email", email);
         params.put("password", password);
-        params.put("lat", lat);
-        params.put("lat", lng);
-
     }
 
     @Override

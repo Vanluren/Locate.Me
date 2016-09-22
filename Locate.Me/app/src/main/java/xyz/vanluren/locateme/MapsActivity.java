@@ -11,6 +11,9 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -23,6 +26,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import static xyz.vanluren.locateme.R.id.map;
 
 //Bla Bla jeg checker lige branching
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -47,7 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             checkLocationPermission();
         }
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(map);
         mapFragment.getMapAsync(this);
 
     }
@@ -152,6 +166,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //Placer en marker der hvor vores user er.
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        double lat = location.getLatitude();
+        double lng = location.getLongitude();
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("You Are Here");
@@ -164,6 +180,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+            }
+
+
+        };
+
+        //Send Update request til serveren
+        ServerRequestUpdate updateUserLocation = new ServerRequestUpdate("57e3c344fe2ea820b75bb6c2", lat,lng,responseListener);
+        RequestQueue queue = Volley.newRequestQueue(MapsActivity.this);
+        queue.add(updateUserLocation);
 
     }
 
@@ -242,4 +271,55 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
+
+    void createMarkersFromJson() throws JSONException, IOException {
+
+        HttpURLConnection conn = null;
+        final StringBuilder json = new StringBuilder();
+        try {
+
+            // Forbindelse til serveren.
+            URL url = new URL("http://10.0.2.2:3000/users");
+
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+
+            InputStreamReader in = new InputStreamReader(conn.getInputStream());
+
+            // Read the JSON data into the StringBuilder
+            int read;
+            char[] buff = new char[1024];
+            while ((read = in.read(buff)) != -1) {
+                json.append(buff, 0, read);
+            }
+
+        } catch (IOException e) {
+
+            Log.e(TAG, "Error connecting to service", e);
+            throw new IOException("Error connecting to service", e);
+
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+
+
+
+        //Read filen ind i et array
+        JSONArray jsonArray = new JSONArray(json);
+        for (int i = 0; i < jsonArray.length(); i++) {
+
+            //Placer en marker for hver af objecterne
+            JSONObject jsonObj = jsonArray.getJSONObject(i);
+
+            mMap.addMarker(new MarkerOptions()
+                    .title(jsonObj.getString("name"))
+                    .position(new LatLng(
+                            jsonObj.getJSONArray("lat").getDouble(0),
+                            jsonObj.getJSONArray("lng").getDouble(1)
+                    ))
+            );
+        }
+    }
+ }
 }
