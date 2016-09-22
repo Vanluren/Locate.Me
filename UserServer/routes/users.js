@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
   });
 });
 
-/* POST /users */
+/* POST /users create new user */
 router.post('/', function(req, res, next) {
   User.create(req.body, function (err, post) {
     if (err) return next(err);
@@ -19,7 +19,36 @@ router.post('/', function(req, res, next) {
   });
 });
 
-/* GET /users/id */
+
+/* POST /users/login create new user*/
+router.post('/login', function(req, res, next) {
+    User.findOne({
+		email: req.body.email
+	}, function(err, user) {
+
+		if (err) throw err;
+
+		if (!user) {
+			res.json({ success: false, message: 'Authentication failed. User not found.' });
+		} else if (user) {
+
+			// check if password matches
+			if (user.password != req.body.password) {
+				res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+			} else {
+
+
+				res.json({
+					success: true
+				});
+			}
+
+		}
+
+	});
+});
+
+/* GET /users/id  */
 router.get('/:id', function(req, res, next) {
   User.findById(req.params.id, function (err, post) {
     if (err) return next(err);
