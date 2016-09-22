@@ -50,12 +50,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected Marker mCurrLocationMarker;
     protected LocationRequest mLocationRequest;
     private static final String TAG = MapsActivity.class.getSimpleName();
+    private String USER_EMAIL;
+
 
     //Create Activityen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        Bundle extras = getIntent().getExtras();
+        String USER_EMAIL = extras.getString("Email");
+
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
@@ -104,6 +111,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         else {
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
+        }
+
+        try {
+            createMarkersFromJson();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -166,8 +181,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //Placer en marker der hvor vores user er.
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
         double lat = location.getLatitude();
         double lng = location.getLongitude();
+
+        String stringLat = String.valueOf(lat);
+        String stringLng = String.valueOf(lng);
+
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("You Are Here");
@@ -184,13 +204,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+
+
             }
 
 
         };
 
         //Send Update request til serveren
-        ServerRequestUpdate updateUserLocation = new ServerRequestUpdate("57e3c344fe2ea820b75bb6c2", lat,lng,responseListener);
+        ServerRequestUpdate updateUserLocation = new ServerRequestUpdate(USER_EMAIL, stringLat , stringLng ,responseListener);
         RequestQueue queue = Volley.newRequestQueue(MapsActivity.this);
         queue.add(updateUserLocation);
 

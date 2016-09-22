@@ -15,7 +15,7 @@ public class ServerRequestUpdate extends StringRequest {
     private static final String REQUEST_URL = "http://10.0.2.2:3000/users";
     private final HashMap params;
 
-    public ServerRequestUpdate(String id, double lat, double lng, Response.Listener<String> listener) {
+    public ServerRequestUpdate(String id, String lat, String lng, Response.Listener<String> listener) {
 
         super(Method.PUT, REQUEST_URL, listener, null);
 

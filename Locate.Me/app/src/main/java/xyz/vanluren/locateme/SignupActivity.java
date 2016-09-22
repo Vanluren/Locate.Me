@@ -81,10 +81,10 @@ public class SignupActivity extends AppCompatActivity {
                     }
                 };
 
-                double lat = 0;
-                double lng = 0;
+                String stringLat = "0";
+                String stringLng = "0";
 
-                ServerRequestSignup serverRequest = new ServerRequestSignup(stringName, stringEmail, stringPassword, responseListener);
+                ServerRequestSignup serverRequest = new ServerRequestSignup(stringName, stringEmail, stringPassword, stringLat, stringLng, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(SignupActivity.this);
                 queue.add(serverRequest);
 
