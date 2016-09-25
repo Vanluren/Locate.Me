@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ServerRequestLogin extends StringRequest{
-    private static final String REQUEST_URL = "http://10.0.2.2:3000/users/login";
+    private static final String REQUEST_URL = "http://192.168.87.102:3000/users/login";
     private final HashMap params;
 
     public ServerRequestLogin(String email, String password, Response.Listener<String> listener) {

@@ -9,7 +9,7 @@ import java.util.Map;
 
 
 public class ServerRequestSignup extends StringRequest{
-    private static final String REQUEST_URL = "http://10.0.2.2:3000/users/create";
+    private static final String REQUEST_URL = "http://192.168.87.102:3000/users/create";
     private final HashMap params;
 
     public ServerRequestSignup(String name, String email, String password, String lat, String lng, Response.Listener<String> listener) {

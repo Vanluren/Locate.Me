@@ -9,8 +9,12 @@ import java.util.ArrayList;
 
 public class BluetoothReciever extends BroadcastReceiver {
     private ArrayList<String> mArrayAdapter;
+    public static String discoveredUser;
 
     public BluetoothReciever() {
+        String discoveredUser;
+
+
     }
 
     @Override
@@ -27,7 +31,7 @@ public class BluetoothReciever extends BroadcastReceiver {
 
             mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
 
-
+            discoveredUser = device.getName();
         }
     }
 }

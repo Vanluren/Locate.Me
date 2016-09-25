@@ -49,10 +49,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected LocationRequest mLocationRequest;
     private static final String TAG = MapsActivity.class.getSimpleName();
     private String USER_EMAIL;
+    private BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
 
-
-    //Create Activityen
+    //Create Activity'en
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -70,7 +70,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
 
-        BluetoothReciever bluetoothReciever = new BluetoothReciever();
+        //Beder brugeren om at tænde for bluetooth, hvis det ikke allerede er det.
+
+        if(bluetoothAdapter == null){
+            Toast.makeText(getApplicationContext(), "The bluetoothadapter is null",Toast.LENGTH_SHORT).show();
+        }else{
+            if(!bluetoothAdapter.isEnabled()){
+            Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(turnOn, 1);
+
+            Intent becomeVisible = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+                startActivity(becomeVisible);
+
+            Toast.makeText(getApplicationContext(), "You are now discoverable",Toast.LENGTH_SHORT).show();
+            }else {
+
+                Intent becomeVisible = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+                startActivity(becomeVisible);
+                Toast.makeText(getApplicationContext(), "You are discoverable", Toast.LENGTH_SHORT).show();
+
+                if (BluetoothReciever.discoveredUser != null) {
+                    BluetoothOtherUserNotification.notify(getApplicationContext(), BluetoothOtherUserNotification.build);
+                }
+
+        }
+
+        }
+
+
     }
 
     @Override
@@ -212,6 +239,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 try {
                     jsonResponse = new JSONArray(response);
                     Log.d(TAG, jsonResponse.toString());
+
+                    for(int i = 0; i<jsonResponse.length(); i++){
+                        JSONObject jsonObject = jsonResponse.getJSONObject(i);
+                        Double otherUserLat = Double.parseDouble(jsonObject.get("lat").toString());
+                        Double otherUserLng = Double.parseDouble(jsonObject.get("lng").toString());
+                        String otherUserName = jsonObject.get("name").toString();
+                        LatLng otherUserLatLng = new LatLng(otherUserLat, otherUserLng);
+
+
+
+                        MarkerOptions otherUserMarkerOptions = new MarkerOptions();
+                        otherUserMarkerOptions.position(otherUserLatLng);
+                        otherUserMarkerOptions.title(otherUserName);
+                        Marker otherUserMarker = mMap.addMarker(otherUserMarkerOptions);
+
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -220,7 +264,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         };
 
-        ServerRequestGetUsers getOtherUserLocations = new ServerRequestGetUsers(responseListenerGetUsers);
+
 
 
         Response.Listener<String> responseListenerUpdate = new Response.Listener<String>() {
@@ -249,6 +293,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         ServerRequestUpdate updateLocationRequest = new ServerRequestUpdate(USER_EMAIL, String.valueOf(lat),String.valueOf(lng),  responseListenerUpdate);
+        ServerRequestGetUsers getOtherUserLocations = new ServerRequestGetUsers(responseListenerGetUsers);
         RequestQueue queue = Volley.newRequestQueue(MapsActivity.this);
         queue.add(updateLocationRequest);
         queue.add(getOtherUserLocations);
@@ -333,4 +378,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
+
 }
