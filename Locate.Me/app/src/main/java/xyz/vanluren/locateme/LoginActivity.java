@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                             if (success) {
                                 Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
-                                intent.putExtra("Email", inputEmail.toString());
+                                intent.putExtra("Email", userEmail);
                                 LoginActivity.this.startActivity(intent);
 
                             } else {
