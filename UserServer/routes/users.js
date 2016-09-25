@@ -12,11 +12,21 @@ router.get('/', function(req, res, next) {
 });
 
 /* POST /users create new user */
-router.post('/', function(req, res, next) {
-  User.create(req.body, function (err, post) {
-    if (err) return next(err);
-    res.json(post);
-  });
+router.post('/create', function(req, res, next) {
+    User.findOne({email: req.body.email}, function(err, user){
+        if(err) throw err;
+
+        if(user){
+            res.json({succes: false});
+        }else{
+            User.create(req.body, function (err, post) {
+                  if (err) return next(err);
+
+
+                  res.json({success:true});
+                });
+        }
+    });
 });
 
 
@@ -57,10 +67,10 @@ router.get('/:id', function(req, res, next) {
 });
 
 /* PUT /users/:id */
-router.put('/:id', function(req, res, next) {
-  User.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
+router.put('/update', function(req, res, next) {
+  User.findOneAndUpdate(req.body.email, req.body, function (err, post) {
     if (err) return next(err);
-    res.json(post);
+    res.json({success:true});
   });
 });
 
