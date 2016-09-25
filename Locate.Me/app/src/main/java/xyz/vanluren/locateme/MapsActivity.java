@@ -1,6 +1,8 @@
 package xyz.vanluren.locateme;
 
 import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -8,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -31,11 +34,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import static xyz.vanluren.locateme.R.id.map;
 
 //Bla Bla jeg checker lige branching
@@ -53,6 +51,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String USER_EMAIL;
 
 
+
     //Create Activityen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +60,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         Bundle extras = getIntent().getExtras();
-        String USER_EMAIL = extras.getString("Email");
+        USER_EMAIL = extras.getString("Email");
 
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -71,6 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
 
+        BluetoothReciever bluetoothReciever = new BluetoothReciever();
     }
 
     @Override
@@ -106,20 +106,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 buildGoogleApiClient();
                 mMap.setMyLocationEnabled(true);
             }
+
         }
+
         //Connect selvom det ikke er Android M
         else {
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
 
-        try {
-            createMarkersFromJson();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        Intent discoverableIntent = new
+                Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
+        startActivity(discoverableIntent);
     }
 
     // GoogleApiClient, er et object der giver os lov til at lave kald til Google API'et
@@ -133,6 +133,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .build();
 
         //Gad vide hvilken exception den kan kaste??
+        //TODO: find ud af hvilken exception der kan kastes her.
         try {
             if(!mGoogleApiClient.isConnected()){
                 mGoogleApiClient.connect();
@@ -166,7 +167,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onConnectionSuspended(int i) {
-        //Lol lol, log alt, D står for Debug
+        //Lol, log alt, D står for Debug
         Log.d(TAG, "Location services has been suspended. Please reconnect.");
     }
 
@@ -182,8 +183,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Placer en marker der hvor vores user er.
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-        double lat = location.getLatitude();
-        double lng = location.getLongitude();
+        final double lat = location.getLatitude();
+        final double lng = location.getLongitude();
 
         String stringLat = String.valueOf(lat);
         String stringLng = String.valueOf(lng);
@@ -201,22 +202,61 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
+
+        final Response.Listener<String> responseListenerGetUsers = new Response.Listener<String>() {
+
             @Override
             public void onResponse(String response) {
 
+                JSONArray jsonResponse= null;
+                try {
+                    jsonResponse = new JSONArray(response);
+                    Log.d(TAG, jsonResponse.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
 
             }
-
-
         };
 
-        //Send Update request til serveren
-        ServerRequestUpdate updateUserLocation = new ServerRequestUpdate(USER_EMAIL, stringLat , stringLng ,responseListener);
+        ServerRequestGetUsers getOtherUserLocations = new ServerRequestGetUsers(responseListenerGetUsers);
+
+
+        Response.Listener<String> responseListenerUpdate = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                JSONObject jsonResponse = null;
+                try {
+                    jsonResponse = new JSONObject(response);
+                    boolean success = jsonResponse.getBoolean("success");
+
+
+                    if (!success) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
+                        builder.setMessage("Location update failed")
+                                .setNegativeButton("Retry", null)
+                                .create()
+                                .show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+
+        ServerRequestUpdate updateLocationRequest = new ServerRequestUpdate(USER_EMAIL, String.valueOf(lat),String.valueOf(lng),  responseListenerUpdate);
         RequestQueue queue = Volley.newRequestQueue(MapsActivity.this);
-        queue.add(updateUserLocation);
+        queue.add(updateLocationRequest);
+        queue.add(getOtherUserLocations);
+
 
     }
+
+
 
 
     //Vi bør nok overvejer at håndtere at forbindelsen til locationListeneren ikke connecter.
@@ -293,55 +333,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
-
-    void createMarkersFromJson() throws JSONException, IOException {
-
-        HttpURLConnection conn = null;
-        final StringBuilder json = new StringBuilder();
-        try {
-
-            // Forbindelse til serveren.
-            URL url = new URL("http://10.0.2.2:3000/users");
-
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-
-            InputStreamReader in = new InputStreamReader(conn.getInputStream());
-
-            // Read the JSON data into the StringBuilder
-            int read;
-            char[] buff = new char[1024];
-            while ((read = in.read(buff)) != -1) {
-                json.append(buff, 0, read);
-            }
-
-        } catch (IOException e) {
-
-            Log.e(TAG, "Error connecting to service", e);
-            throw new IOException("Error connecting to service", e);
-
-        } finally {
-            if (conn != null) {
-                conn.disconnect();
-            }
-
-
-
-        //Read filen ind i et array
-        JSONArray jsonArray = new JSONArray(json);
-        for (int i = 0; i < jsonArray.length(); i++) {
-
-            //Placer en marker for hver af objecterne
-            JSONObject jsonObj = jsonArray.getJSONObject(i);
-
-            mMap.addMarker(new MarkerOptions()
-                    .title(jsonObj.getString("name"))
-                    .position(new LatLng(
-                            jsonObj.getJSONArray("lat").getDouble(0),
-                            jsonObj.getJSONArray("lng").getDouble(1)
-                    ))
-            );
-        }
-    }
- }
 }

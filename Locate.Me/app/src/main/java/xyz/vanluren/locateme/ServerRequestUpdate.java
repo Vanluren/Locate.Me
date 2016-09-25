@@ -15,12 +15,12 @@ public class ServerRequestUpdate extends StringRequest {
     private static final String REQUEST_URL = "http://10.0.2.2:3000/users";
     private final HashMap params;
 
-    public ServerRequestUpdate(String id, String lat, String lng, Response.Listener<String> listener) {
+    public ServerRequestUpdate(String email, String lat, String lng, Response.Listener<String> listener) {
 
         super(Method.PUT, REQUEST_URL, listener, null);
 
         params = new HashMap<>();
-        params.put("id", id);
+        params.put("email", email);
         params.put("lat", lat);
         params.put("lng", lng);
 
