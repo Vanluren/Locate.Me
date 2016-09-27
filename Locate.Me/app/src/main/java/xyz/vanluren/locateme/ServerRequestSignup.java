@@ -22,7 +22,7 @@ public class ServerRequestSignup extends StringRequest{
         params.put("password", password);
         params.put("lat", lat);
         params.put("lng", lng);
-        params.put("mac_address", mac_addre);
+        params.put("mac_address", mac_address);
     }
 
     @Override
