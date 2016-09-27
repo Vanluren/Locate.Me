@@ -84,8 +84,9 @@ public class SignupActivity extends AppCompatActivity {
 
                 String stringLat = "0";
                 String stringLng = "0";
+                String mac = "0";
 
-                ServerRequestSignup serverRequest = new ServerRequestSignup(stringName, stringEmail, stringPassword, stringLat, stringLng, responseListener);
+                ServerRequestSignup serverRequest = new ServerRequestSignup(stringName, stringEmail, stringPassword, stringLat, stringLng, mac, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(SignupActivity.this);
                 queue.add(serverRequest);
 

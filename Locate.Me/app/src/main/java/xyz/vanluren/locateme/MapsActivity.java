@@ -92,9 +92,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (BluetoothReciever.discoveredUser != null) {
                     BluetoothOtherUserNotification.notify(getApplicationContext(), BluetoothOtherUserNotification.build);
                 }
-
-        }
-
+            }
         }
 
 
@@ -238,7 +236,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 JSONArray jsonResponse= null;
                 try {
                     jsonResponse = new JSONArray(response);
-                    Log.d(TAG, jsonResponse.toString());
+                    Log.d(TAG, "The server has responded with at json array of users");
 
                     for(int i = 0; i<jsonResponse.length(); i++){
                         JSONObject jsonObject = jsonResponse.getJSONObject(i);
@@ -292,7 +290,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         };
 
 
-        ServerRequestUpdate updateLocationRequest = new ServerRequestUpdate(USER_EMAIL, String.valueOf(lat),String.valueOf(lng),  responseListenerUpdate);
+        ServerRequestUpdate updateLocationRequest = new ServerRequestUpdate(USER_EMAIL, String.valueOf(lat), String.valueOf(lng),  responseListenerUpdate);
         ServerRequestGetUsers getOtherUserLocations = new ServerRequestGetUsers(responseListenerGetUsers);
         RequestQueue queue = Volley.newRequestQueue(MapsActivity.this);
         queue.add(updateLocationRequest);
