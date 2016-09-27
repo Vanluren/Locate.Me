@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
   });
 });
 
-/* POST /users create new user */
+/* POST /users/create create new user */
 router.post('/create', function(req, res, next) {
     User.findOne({email: req.body.email}, function(err, user){
         if(err) throw err;
@@ -59,6 +59,7 @@ router.post('/login', function(req, res, next) {
 });
 
 /* GET /users/id  */
+//TODO: email og username
 router.get('/:id', function(req, res, next) {
   User.findById(req.params.id, function (err, post) {
     if (err) return next(err);
@@ -66,7 +67,9 @@ router.get('/:id', function(req, res, next) {
   });
 });
 
-/* PUT /users/:id */
+
+
+/* PUT /users/:email */
 router.put('/update', function(req, res, next) {
   User.findOneAndUpdate(req.body.email, req.body, function (err, post) {
     if (err) return next(err);
@@ -74,12 +77,12 @@ router.put('/update', function(req, res, next) {
   });
 });
 
-/* DELETE /users/:id */
-router.delete('/:id', function(req, res, next) {
-  User.findByIdAndRemove(req.params.id, req.body, function (err, post) {
+/* DELETE /users */
+router.delete('/', function(req, res, next) {
+  User.findOneAndDelete(req.params.name, function (err, post) {
     if (err) return next(err);
-    res.json(post);
-  });
+    res.json({success:true});
+});
 });
 
 module.exports = router;
