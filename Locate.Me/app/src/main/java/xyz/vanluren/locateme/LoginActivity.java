@@ -1,5 +1,3 @@
-//TODO: DEN HER CLASS ER ALT ANDET END FÆRDIG!!!!
-
 package xyz.vanluren.locateme;
 
 import android.app.LoaderManager.LoaderCallbacks;

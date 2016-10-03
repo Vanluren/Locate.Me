@@ -158,7 +158,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .build();
 
         //Gad vide hvilken exception den kan kaste??
-        //TODO: find ud af hvilken exception der kan kastes her.
         try {
             if(!mGoogleApiClient.isConnected()){
                 mGoogleApiClient.connect();
@@ -168,7 +167,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.d(TAG, "Somthing went wrong, your API Client has not been connected");
             }
         }catch (Exception e){
-
         }
 
     }
@@ -239,13 +237,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Log.d(TAG, "The server has responded with at json array of users");
 
                     for(int i = 0; i<jsonResponse.length(); i++){
+
                         JSONObject jsonObject = jsonResponse.getJSONObject(i);
-                        Double otherUserLat = Double.parseDouble(jsonObject.get("lat").toString());
-                        Double otherUserLng = Double.parseDouble(jsonObject.get("lng").toString());
-                        String otherUserName = jsonObject.get("name").toString();
+
+                        Double otherUserLat = Double.valueOf(0);
+                        Double otherUserLng = Double.valueOf(0);
+                        String otherUserName = "";
+
+                        if (!jsonObject.isNull("lat") && !jsonObject.isNull("lng") && !jsonObject.isNull("name")){
+                            otherUserLat = Double.valueOf(jsonObject.getString("lat"));
+                            otherUserLng = Double.valueOf(jsonObject.getString("lng"));
+                            otherUserName = jsonObject.optString("name");
+                        }
+
                         LatLng otherUserLatLng = new LatLng(otherUserLat, otherUserLng);
-
-
 
                         MarkerOptions otherUserMarkerOptions = new MarkerOptions();
                         otherUserMarkerOptions.position(otherUserLatLng);
@@ -262,8 +267,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         };
 
-
-
+        ServerRequestGetUsers getOtherUserLocations = new ServerRequestGetUsers(responseListenerGetUsers);
+        Volley.newRequestQueue(getApplicationContext()).add(getOtherUserLocations);
 
         Response.Listener<String> responseListenerUpdate = new Response.Listener<String>() {
             @Override
@@ -291,10 +296,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         ServerRequestUpdate updateLocationRequest = new ServerRequestUpdate(USER_EMAIL, String.valueOf(lat), String.valueOf(lng),  responseListenerUpdate);
-        ServerRequestGetUsers getOtherUserLocations = new ServerRequestGetUsers(responseListenerGetUsers);
         RequestQueue queue = Volley.newRequestQueue(MapsActivity.this);
         queue.add(updateLocationRequest);
-        queue.add(getOtherUserLocations);
+
 
 
     }
