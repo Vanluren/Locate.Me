@@ -7,11 +7,13 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -35,6 +37,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import static xyz.vanluren.locateme.R.id.map;
+import static xyz.vanluren.locateme.R.id.maps_to_reminder;
+import static xyz.vanluren.locateme.R.id.maps_to_user;
 
 //Bla Bla jeg checker lige branching
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -50,6 +54,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final String TAG = MapsActivity.class.getSimpleName();
     private String USER_EMAIL;
     private BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    private FloatingActionButton userFAB = (FloatingActionButton) findViewById(maps_to_user);
+    private FloatingActionButton reminderFAB = (FloatingActionButton) findViewById(maps_to_reminder);
 
 
     //Create Activity'en
@@ -95,6 +101,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
 
+
+        reminderFAB.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //TODO something when floating action menu first item clicked
+
+            }
+        });
+        userFAB.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //TODO something when floating action menu second item clicked
+
+            }
+        });
 
     }
 

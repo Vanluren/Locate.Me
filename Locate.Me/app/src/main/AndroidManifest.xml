@@ -43,6 +43,11 @@
             android:name=".BluetoothReciever"
             android:enabled="true"
             android:exported="true" />
+
+        <activity
+            android:name=".ReminderActivity"
+            android:label="@string/title_activity_reminder"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
