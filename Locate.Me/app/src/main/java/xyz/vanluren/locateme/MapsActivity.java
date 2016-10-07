@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -19,6 +18,8 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -37,8 +38,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import static xyz.vanluren.locateme.R.id.map;
-import static xyz.vanluren.locateme.R.id.maps_to_reminder;
-import static xyz.vanluren.locateme.R.id.maps_to_user;
 
 //Bla Bla jeg checker lige branching
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -54,8 +53,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final String TAG = MapsActivity.class.getSimpleName();
     private String USER_EMAIL;
     private BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    private FloatingActionButton userFAB = (FloatingActionButton) findViewById(maps_to_user);
-    private FloatingActionButton reminderFAB = (FloatingActionButton) findViewById(maps_to_reminder);
+    private FloatingActionMenu reminderFAM;
+    private FloatingActionButton userFAB = (FloatingActionButton) findViewById(R.id.maps_to_user);
+    private FloatingActionButton reminderFAB = (FloatingActionButton) findViewById(R.id.maps_to_reminder);
 
 
     //Create Activity'en
@@ -101,16 +101,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
 
-
+        reminderFAM = (FloatingActionMenu) findViewById(R.id.maps_FAM);
         reminderFAB.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //TODO something when floating action menu first item clicked
+                Intent reminder  = new Intent(MapsActivity.this, ReminderListActivity.class);
+                MapsActivity.this.startActivity(reminder);
 
             }
         });
         userFAB.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //TODO something when floating action menu second item clicked
+                Intent userProfile = new Intent(MapsActivity.this, UserProfile.class);
+                MapsActivity.this.startActivity(userProfile);
 
             }
         });
