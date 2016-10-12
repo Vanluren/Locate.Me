@@ -17,8 +17,8 @@
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/maps_FAM"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="11dp"
@@ -55,26 +55,15 @@
         fab:menu_shadowYOffset="4dp"
         fab:menu_showShadow="true">
 
-
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/maps_to_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_name"
-            fab:fab_label="User"
-            fab:fab_size="mini" />
-
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/maps_to_reminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_action_create"
-            fab:fab_label="New Reminder"
+            fab:fab_label="Reminders"
             fab:fab_size="mini" />
     </com.github.clans.fab.FloatingActionMenu>
 
 
-
-    </FrameLayout>
+</FrameLayout>
 

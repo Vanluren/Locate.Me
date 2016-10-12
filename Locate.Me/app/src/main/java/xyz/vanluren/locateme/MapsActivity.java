@@ -53,10 +53,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final String TAG = MapsActivity.class.getSimpleName();
     private String USER_EMAIL;
     private BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    private FloatingActionMenu reminderFAM;
-    private FloatingActionButton userFAB = (FloatingActionButton) findViewById(R.id.maps_to_user);
-    private FloatingActionButton reminderFAB = (FloatingActionButton) findViewById(R.id.maps_to_reminder);
-
+    FloatingActionButton reminderFAB;
+    FloatingActionMenu reminderFAM;
 
     //Create Activity'en
     @Override
@@ -101,18 +99,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
 
+        reminderFAB = (FloatingActionButton) findViewById(R.id.maps_to_reminder);
         reminderFAM = (FloatingActionMenu) findViewById(R.id.maps_FAM);
         reminderFAB.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent reminder  = new Intent(MapsActivity.this, ReminderListActivity.class);
                 MapsActivity.this.startActivity(reminder);
-
-            }
-        });
-        userFAB.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent userProfile = new Intent(MapsActivity.this, UserProfile.class);
-                MapsActivity.this.startActivity(userProfile);
 
             }
         });
