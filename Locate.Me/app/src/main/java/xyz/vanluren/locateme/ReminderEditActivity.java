@@ -118,8 +118,8 @@ public class ReminderEditActivity extends AppCompatActivity {
 
         mConfirmButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                setResult(RESULT_OK);
                 Toast.makeText(getApplicationContext(), "Reminder Saved", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK);
                 finish();
             }
 
@@ -128,7 +128,6 @@ public class ReminderEditActivity extends AppCompatActivity {
         updateDateButtonText();
         updateTimeButtonText();
     }
-
     @TargetApi(Build.VERSION_CODES.N)
     private void updateTimeButtonText() {
         // Set the time button text based upon the value from the database

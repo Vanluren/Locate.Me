@@ -103,7 +103,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         reminderFAM = (FloatingActionMenu) findViewById(R.id.maps_FAM);
         reminderFAB.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent reminder  = new Intent(MapsActivity.this, ReminderListActivity.class);
+                Intent reminder  = new Intent(MapsActivity.this, ReminderEditActivity.class);
                 MapsActivity.this.startActivity(reminder);
 
             }

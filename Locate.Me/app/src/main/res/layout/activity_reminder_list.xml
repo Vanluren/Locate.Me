@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+    <ListView
+        android:id="@+id/provider_service_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="#999999"
+        />
+
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/create_reminder"
-        android:layout_width="50dp"
-        android:layout_height="54dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:src="@drawable/ic_action_create"
         fab:fab_label="New Reminder"
-        fab:fab_size="mini"
+        fab:fab_size="normal"
         android:elevation="24dp"
         android:visibility="visible"
-        tools:layout_editor_absoluteY="589dp"
-        tools:layout_editor_absoluteX="337dp" />
+        android:layout_gravity="end|bottom" />
 
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="0dp" />
-
-</android.support.constraint.ConstraintLayout>
+</FrameLayout>

@@ -10,7 +10,7 @@ import com.android.volley.toolbox.StringRequest;
 
 public class ServerRequestGetUsers extends StringRequest{
 
-    private static final String REQUEST_URL = "http://vanluren.xyz:3000/users";
+    //TODO private static final String REQUEST_URL = "";
     public ServerRequestGetUsers(Response.Listener<String> listener) {
         super(Method.GET, REQUEST_URL, listener, null);
     }

@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class ServerRequestUpdate extends StringRequest {
 
-    private static final String REQUEST_URL = "http://vanluren.xyz:3000/users/update";
+    //TODO private static final String REQUEST_URL = "";
     private final HashMap params;
 
     public ServerRequestUpdate(String email, String lat, String lng, Response.Listener<String> listener) {
